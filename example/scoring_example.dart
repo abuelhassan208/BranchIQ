@@ -116,6 +116,7 @@ void main() {
   print(
       '  Raw Cost: 10.0 -> Normalized Cost Penalty: ${(10.0 / 100.0).toStringAsFixed(2)}');
   // Confidence decays at deeper levels based on parent confidence and depth
-  print('  Decayed Confidence: ${(subSnap['confidence'] as double).toStringAsFixed(4)}');
+  print(
+      '  Decayed Confidence: ${(subSnap['confidence'] as double).toStringAsFixed(4)}');
   print('  Final Score: ${(subSnap['score'] as double).toStringAsFixed(4)}');
 }
