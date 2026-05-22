@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## 0.1.1 (2026-05-22)
+
+### Fixed
+- Fixed formatting issue in `scoring_example.dart` that caused CI checks to fail.
+- Shortened pubspec description to meet the pub.dev 60-180 character standard for SEO optimization.
+- Removed redundant and pre-generation `documentation` URL field from `pubspec.yaml` to ensure pub.dev auto-generates documentation links correctly.
+
 ## 0.1.0 (2026-05-22)
 
 Initial release of BranchIQ — a bounded, deterministic runtime decision intelligence engine for Dart and Flutter.
