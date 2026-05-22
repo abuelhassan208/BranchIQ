@@ -75,7 +75,8 @@ void main() {
   print('');
 
   // --- Scenario 2: Cost Conscious Weight Configuration ---
-  // We prioritize keeping costs low (wc = 0.7), and discount high impact (wi = 0.1).
+  // We prioritize keeping costs low (wc = 0.7), and discount high
+  // impact (wi = 0.1).
   final costScoring = ScoringConfig(
     wp: 0.2, // 20% Probability weight
     wi: 0.1, // 10% Impact weight
@@ -95,28 +96,31 @@ void main() {
   print('Selected Path: ${resultCost.bestPath.nodeIds.join(' -> ')}');
   print('Total Utility: ${resultCost.totalUtility.toStringAsFixed(4)}');
   print('Why: Under cost-conscious weights, the lower cost of branch_lc (10.0) '
-      'wins over the expensive branch_hq (80.0), despite branch_hq having superior quality.');
+      'wins over the expensive branch_hq (80.0), despite branch_hq '
+      'having superior quality.');
   print('');
 
   // --- Scenario 3: Confidence Decay and Cost Normalization Demonstration ---
-  // Let's examine the detailed scoring for branch_hq and its sub-child nested_hq_sub
-  // under Scenario 1 weights to see cost scaling and confidence decay in action.
+  // Let's examine the detailed scoring for branch_hq and its sub-child
+  // nested_hq_sub under Scenario 1 weights to see cost scaling and
+  // confidence decay in action.
   final snapshot = engine.exportDebugSnapshot(resultQuality);
   final hqSnap = snapshot.nodeSnapshots['branch_hq']!;
   final subSnap = snapshot.nodeSnapshots['nested_hq_sub']!;
 
   print('--- Scenario 3: Diagnostics (Confidence Decay & Cost Scaling) ---');
   print('Node "branch_hq" (Depth 1):');
-  print(
-      '  Raw Cost: 80.0 -> Normalized Cost Penalty: ${(80.0 / 100.0).toStringAsFixed(2)}');
+  print('  Raw Cost: 80.0 -> Normalized Cost Penalty: '
+      '${(80.0 / 100.0).toStringAsFixed(2)}');
   print('  Confidence: ${(hqSnap['confidence'] as double).toStringAsFixed(4)}');
   print('  Final Score: ${(hqSnap['score'] as double).toStringAsFixed(4)}');
   print('');
   print('Node "nested_hq_sub" (Depth 2):');
-  print(
-      '  Raw Cost: 10.0 -> Normalized Cost Penalty: ${(10.0 / 100.0).toStringAsFixed(2)}');
+  print('  Raw Cost: 10.0 -> Normalized Cost Penalty: '
+      '${(10.0 / 100.0).toStringAsFixed(2)}');
   // Confidence decays at deeper levels based on parent confidence and depth
-  print(
-      '  Decayed Confidence: ${(subSnap['confidence'] as double).toStringAsFixed(4)}');
-  print('  Final Score: ${(subSnap['score'] as double).toStringAsFixed(4)}');
+  print('  Decayed Confidence: '
+      '${(subSnap['confidence'] as double).toStringAsFixed(4)}');
+  print('  Final Score: '
+      '${(subSnap['score'] as double).toStringAsFixed(4)}');
 }
