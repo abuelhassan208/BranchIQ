@@ -3,7 +3,7 @@ description: >-
   A bounded, deterministic decision intelligence engine for Dart/Flutter.
   Evaluates decision trees using multi-attribute scoring, beam-search pruning,
   and priority-first traversal.
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/abuelhassan208/BranchIQ
 repository: https://github.com/abuelhassan208/BranchIQ
 issue_tracker: https://github.com/abuelhassan208/BranchIQ/issues

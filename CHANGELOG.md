@@ -6,6 +6,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## 0.1.2 (2026-05-22)
+
+### Added
+- Added standard `example/example.dart` to satisfy pub.dev package example conventions, securing the missing 10 points.
+
 ## 0.1.1 (2026-05-22)
 
 ### Fixed
