@@ -1,0 +1,55 @@
+# BranchIQ Static Analysis Configuration
+# Enforces type safety, immutability, and deterministic rules at compile-time.
+
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    # Strict mode configuration helps prevent dynamic type pollution, which
+    # is critical to avoid runtime casting errors during mathematical scoring.
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+  errors:
+    # Treat unassigned variables, missing parameters, and type mismatch warnings
+    # as errors to ensure engine pipelines do not run in an undefined state.
+    missing_required_param: error
+    missing_return: error
+    todo: ignore
+
+linter:
+  rules:
+    # 1. Determinism and Safety Rules
+    
+    # avoid_dynamic_calls: Banned to ensure that all dynamic variables/telemetry
+    # from the EvaluationContext are safely cast before use, preventing runtime crashes.
+    - avoid_dynamic_calls
+    
+    # prefer_final_fields: Immutability is the core safety guarantee of BranchIQ models.
+    # Marking fields as final prevents accidental state mutation during tree traversal.
+    - prefer_final_fields
+    
+    # prefer_final_locals: Ensures that variables computed inside scoring math or A*
+    # traversals cannot be reassigned, protecting calculation integrity.
+    - prefer_final_locals
+    
+    # prefer_const_constructors: Minimizes heap allocations during traversal by promoting
+    # compile-time constant instances of configuration and nodes.
+    - prefer_const_constructors
+    
+    # 2. Scope & Import Protection
+    
+    # avoid_relative_lib_imports: Enforces consistent package: imports to prevent
+    # circular dependencies and duplicate class declarations.
+    - avoid_relative_lib_imports
+    
+    # 3. Documentation Rules
+    
+    # public_member_api_docs: Ensures that all public API constructs are fully
+    # documented for clean developer onboarding.
+    - public_member_api_docs
+    
+    # always_require_non_null_named_parameters: Guarantees that configurations and node
+    # constructors do not receive implicit null values, enforcing strict setups.
+    - always_require_non_null_named_parameters

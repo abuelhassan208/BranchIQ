@@ -1,0 +1,27 @@
+name: branchiq
+description: >-
+  A bounded, deterministic runtime decision intelligence engine for Dart and Flutter.
+  Evaluates decision trees using multi-attribute scoring, beam-search pruning,
+  and priority-first traversal. Synchronous, pure Dart, zero dependencies.
+version: 0.1.0
+homepage: https://github.com/abuelhassan208/BranchIQ
+repository: https://github.com/abuelhassan208/BranchIQ
+issue_tracker: https://github.com/abuelhassan208/BranchIQ/issues
+documentation: https://pub.dev/documentation/branchiq/latest/
+
+topics:
+  - decision-tree
+  - deterministic
+  - utility
+  - scoring
+  - dart
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  # Zero runtime dependencies. Pure Dart SDK only.
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.24.0

@@ -1,0 +1,25 @@
+# Dart tool ignores
+.dart_tool/
+.packages
+pubspec.lock
+
+# IDE and Editor ignores
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.DS_Store
+
+# Flutter tool ignores (in case user runs Flutter tooling)
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+
+# Coverage and testing ignores
+coverage/
+*.g.cov
+
+# Log and crash files
+*.log
+doc/api/
