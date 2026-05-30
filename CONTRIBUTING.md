@@ -82,3 +82,20 @@ Out of scope for v0.3.x (require RFC for future versions):
 - Async evaluation, background isolates, or I/O/reflection in plugins
 - Flutter widget integrations
 - Dynamic node expansion (`BranchExpander`) or custom report exporters (`ReportExporter`)
+
+---
+
+## 8. Release Process
+
+To publish a new version of BranchIQ to pub.dev, follow this automated release process:
+
+1. **Update Version**: Bump the package version in `pubspec.yaml` (e.g., `version: 0.3.0`).
+2. **Update Changelog**: Document all notable changes under the new version header in `CHANGELOG.md`.
+3. **Commit & Push**: Commit the version bump and push changes to the `main` branch.
+4. **CI Verification**: Wait for the GitHub Actions CI workflow to run and pass successfully on the commit.
+5. **Create & Push Release Tag**: Tag the commit with a version tag prefix `v` matching the version in `pubspec.yaml`, then push the tag:
+   ```bash
+   git tag v0.3.0
+   git push origin v0.3.0
+   ```
+6. **Automated Publishing**: The publish workflow (`publish.yml`) will trigger on the pushed tag, run formatting, static analysis, unit tests, example validations, and publish the package automatically to pub.dev via **Trusted Publishing** (OIDC).

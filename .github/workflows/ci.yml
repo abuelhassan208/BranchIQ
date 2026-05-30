@@ -1,0 +1,41 @@
+name: BranchIQ CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 'stable'
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze code
+        run: dart analyze
+
+      - name: Run tests
+        run: dart test
+
+      - name: Generate documentation
+        run: dart doc
+
+      - name: Publish dry-run
+        run: dart pub publish --dry-run
+
+      - name: Run all examples
+        run: |
+          for file in example/*.dart; do
+            echo "Running example: $file"
+            dart run "$file" || { echo "::error file=$file::Example failed: $file"; exit 1; }
+          done

@@ -1,0 +1,61 @@
+name: BranchIQ Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: pub-release
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 'stable'
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze code
+        run: dart analyze
+
+      - name: Run tests
+        run: dart test
+
+      - name: Generate documentation
+        run: dart doc
+
+      - name: Publish dry-run
+        run: dart pub publish --dry-run
+
+      - name: Run all examples
+        run: |
+          for file in example/*.dart; do
+            echo "Running example: $file"
+            dart run "$file" || { echo "::error file=$file::Example failed: $file"; exit 1; }
+          done
+
+      - name: Validate version matches git tag
+        run: |
+          PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//' | tr -d '[[:space:]]')
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          echo "Pubspec version: '$PUBSPEC_VERSION'"
+          echo "Tag version: '$TAG_VERSION'"
+          if [ "$PUBSPEC_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Version mismatch! pubspec.yaml version ($PUBSPEC_VERSION) does not match pushed tag version ($TAG_VERSION)."
+            exit 1
+          fi
+          echo "Version verification passed."
+
+      - name: Publish to pub.dev
+        run: dart pub publish --force

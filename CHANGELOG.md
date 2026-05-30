@@ -6,7 +6,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## 0.3.0-beta.1 (Unreleased)
+## 0.3.0-beta.2 (Unreleased)
+
+### Added
+
+**CI/CD Release Pipeline**
+- Configured a new GitHub Actions CI workflow (`ci.yml`) to validate formatting, static analysis, unit/regression tests, documentation building, and dry-run publishing on every push and pull request.
+- Implemented dynamic example auto-discovery and validation inside CI to run all examples under `example/` automatically.
+- Integrated automated pub.dev deployment via Trusted Publishing (OIDC) triggered exclusively on release tags (`v*`).
+- Added tag-to-pubspec version safety validation to prevent publishing mismatched releases.
+- Configured a manual deployment approval gate using the `pub-release` GitHub Environment to prevent accidental automated publishing on tag push.
+
+---
+
+## 0.3.0-beta.1 (2026-05-30)
 
 ### Added
 
