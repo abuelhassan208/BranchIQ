@@ -6,7 +6,21 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## 0.3.0-beta.2 (Unreleased)
+## 0.3.0-beta.3 (2026-05-30)
+
+### Fixed
+
+- Fixed a compilation-blocking bug in the README.md plugin example, replacing incorrect `.metadata['key']` call with the correct `.get<T>('key')` method.
+- Updated outdated installation package version references across `README.md` and `doc/guides/quickstart.md` to point to `0.3.0-beta.3`.
+
+### Changed
+
+- Expanded public API documentation for the `plugins` parameter of `BranchIQEngine.evaluateSync` to clarify usage.
+- Synchronized `ROADMAP.md` milestones to reflect completion of the `0.3.0-beta.2` release pipeline.
+
+---
+
+## 0.3.0-beta.2 (2026-05-30)
 
 ### Added
 

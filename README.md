@@ -23,7 +23,7 @@ It is a pure Dart library with zero external dependencies. It runs on the callin
 
 ```yaml
 dependencies:
-  branchiq: ^0.3.0-beta.1
+  branchiq: ^0.3.0-beta.3
 ```
 
 ```bash
@@ -338,7 +338,7 @@ class NetworkAdjuster implements NodeEvaluator {
 
   @override
   DecisionNode evaluate(DecisionNode node, EvaluationContext context) {
-    if (node.id == 'fetch_network' && context.metadata['isOffline'] == true) {
+    if (node.id == 'fetch_network' && context.get<bool>('isOffline') == true) {
       // Return a copy of the node with modified evaluator-owned metrics
       return node.copyWith(
         probability: 0.0,

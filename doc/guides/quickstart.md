@@ -10,7 +10,7 @@ Add BranchIQ to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  branchiq: ^0.3.0-beta.1
+  branchiq: ^0.3.0-beta.3
 ```
 
 Then run:

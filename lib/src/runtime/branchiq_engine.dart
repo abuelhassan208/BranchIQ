@@ -51,6 +51,9 @@ abstract class BranchIQEngine {
   /// Set [enableBenchmark] to `true` to populate
   /// [EvaluationResult.benchmarkSnapshot] with deterministic execution metrics.
   ///
+  /// Pass an optional [plugins] registry to register custom [NodeEvaluator] instances
+  /// that dynamically adjust node metrics during the scoring phase.
+  ///
   /// Throws [ArgumentError] if required configuration is missing.
   EvaluationResult evaluateSync({
     required DecisionTree tree,

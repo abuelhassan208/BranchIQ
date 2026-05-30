@@ -22,10 +22,10 @@ This roadmap outlines the development phases for the BranchIQ package. Our prior
 * [x] Design and implement plugin provenance recording inside `DebugSnapshot`.
 * [x] Support offline, plugin-independent Replay and Explainability by loading plugin provenance evidence.
 
-## Phase v0.3.1 - Release Preparation / Beta Readiness (In Progress)
-* [/] Clean up project context, documentation, and guides.
-* [ ] Verify pub package publication with `dart pub publish --dry-run`.
-* [ ] Finalize beta release version 0.3.0-beta.1.
+## Phase v0.3.1 - Release Preparation / Beta Readiness (Completed)
+* [x] Clean up project context, documentation, and guides.
+* [x] Verify pub package publication with `dart pub publish --dry-run`.
+* [x] Finalize beta release version 0.3.0-beta.3.
 
 ## Phase v0.4 - Advanced Traversal & Expanders (Planned)
 * [ ] Expose public `BranchExpander` interfaces to allow dynamic runtime tree expansion (deferred from v0.3).
