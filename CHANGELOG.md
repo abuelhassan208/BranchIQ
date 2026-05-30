@@ -6,6 +6,29 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## 0.2.0 (2026-05-23)
+
+### Added
+
+**Replay Infrastructure**
+- Fully reconstructed offline execution context from saved evidence without rerunning evaluation logic (`ReplayLoader`, `ReplaySession`, `ReplayInspector`).
+- Replay inspector functions to examine selected paths, trace lines, pruned nodes, and individual node lookup.
+- Deterministic schema integrity checks to prevent corrupt and malformed snapshot load failures (`ReplayCorruptException`).
+
+**Explainability Layer**
+- Bounded, literal, evidence-based explainability reporting without LLM hallucinations or heuristics (`BranchIQExplainer`, `ExplanationReport`, `NodeExplanation`).
+- Interactive selected vs. rejected pathway comparison diagnostics with score delta, confidence delta, and pruning discrepancy checks (`DecisionComparison`).
+- Deterministic, platform-invariant Markdown and JSON explainability report generation.
+
+**Snapshot Diffing**
+- Synchronous and offline comparisons between historical executions (`SnapshotDiffer`, `SnapshotDiff`).
+- Comprehensive change metrics tracking newly added, modified, removed, pruned, and unpruned nodes, as well as utility deltas (`NodeMetricDiff`).
+- Precise chronological trace diffing (`TraceDiff`).
+
+**Canonical Serialization**
+- Custom floating-point formatting to exactly 4 decimal places with strict dot separators, normalization of negative zero (`-0.0` to `0.0000`), infinity handling, and NaN rejection (`CanonicalFloatFormatter`).
+- Compact, platform-independent, and byte-identical JSON and Markdown serialization encoders (`CanonicalJsonEncoder`, `CanonicalMarkdownWriter`, `CanonicalizationValidator`).
+
 ## 0.1.2 (2026-05-22)
 
 ### Added
@@ -92,6 +115,6 @@ None — this is the initial public release.
 
 ### Known Limitations
 
-- `TraversalStrategy` currently supports only `priorityFirst`. Additional strategies planned for v0.2.0.
-- `BranchIQEngine` is synchronous only. Async evaluation is not in scope for v0.1.0.
+- `TraversalStrategy` currently supports only `priorityFirst`. Additional strategies deferred to a future release.
+- `BranchIQEngine` is synchronous only. Async evaluation is not in scope.
 - Dynamic node expansion is not yet supported (tree structure is fixed at construction time).

@@ -36,6 +36,9 @@ class DebugSnapshot {
   /// Optional benchmark execution snapshot containing resource usage metrics.
   final BenchmarkSnapshot? benchmarkSnapshot;
 
+  /// The plugin provenance records of evaluated node modifications.
+  final List<Map<String, dynamic>> pluginProvenance;
+
   /// Creates a [DebugSnapshot] instance.
   const DebugSnapshot({
     required this.engineVersion,
@@ -49,6 +52,7 @@ class DebugSnapshot {
     this.scoringSummaries = const {},
     this.traversalSummaries = const {},
     this.benchmarkSnapshot,
+    this.pluginProvenance = const [],
   });
 
   /// Deserializes a [DebugSnapshot] from a JSON map.
@@ -102,6 +106,17 @@ class DebugSnapshot {
     final benchmarkSnapshot =
         rawBenchmark != null ? BenchmarkSnapshot.fromJson(rawBenchmark) : null;
 
+    final rawProvenance =
+        json['pluginProvenance'] as List<dynamic>? ?? const [];
+    final pluginProvenance = <Map<String, dynamic>>[];
+    for (final item in rawProvenance) {
+      if (item is Map) {
+        pluginProvenance.add(Map<String, dynamic>.unmodifiable(
+          item.cast<String, dynamic>(),
+        ));
+      }
+    }
+
     return DebugSnapshot(
       engineVersion: engineVersion,
       rootId: rootId,
@@ -115,6 +130,8 @@ class DebugSnapshot {
       scoringSummaries: scoringSummaries,
       traversalSummaries: traversalSummaries,
       benchmarkSnapshot: benchmarkSnapshot,
+      pluginProvenance:
+          List<Map<String, dynamic>>.unmodifiable(pluginProvenance),
     );
   }
 
@@ -135,11 +152,30 @@ class DebugSnapshot {
         ..sort((a, b) => a.key.compareTo(b.key)),
     );
 
+    final sortedProvenance = pluginProvenance.map((prov) {
+      final modifiedFields = prov['modifiedFields'];
+      final sortedModified = modifiedFields is Map
+          ? Map.fromEntries(
+              modifiedFields.entries.toList()
+                ..sort((a, b) => a.key.toString().compareTo(b.key.toString())),
+            )
+          : modifiedFields;
+      final sortedProv = Map.fromEntries(
+        prov.entries.toList()
+          ..sort((a, b) => a.key.toString().compareTo(b.key.toString())),
+      );
+      if (sortedModified != null) {
+        sortedProv['modifiedFields'] = sortedModified;
+      }
+      return Map<String, dynamic>.unmodifiable(sortedProv);
+    }).toList();
+
     return {
       'engineVersion': engineVersion,
       'rootId': rootId,
       'selectedPath': selectedPath.toList(),
       'nodeSnapshots': sortedSnapshots,
+      'pluginProvenance': sortedProvenance,
       'pruningTraces': pruningTraces.toList(),
       'metadata': sortedMetadata,
       'runtimeTraces': runtimeTraces.toList(),

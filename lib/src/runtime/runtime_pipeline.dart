@@ -14,6 +14,8 @@ import '../models/decision_node.dart';
 import '../models/decision_tree.dart';
 import '../models/evaluation_context.dart';
 import '../models/evaluation_result.dart';
+import '../plugins/plugin_registry.dart';
+import '../plugins/plugin_registry_validator.dart';
 import '../pruning/pruning_pipeline.dart';
 import '../traversal/traversal_pipeline.dart';
 import '../validation/tree_validator.dart';
@@ -31,10 +33,15 @@ class RuntimePipeline {
     required PruningConfig pruningConfig,
     required TraversalConfig traversalConfig,
     EvaluationContext? context,
+    PluginRegistry? plugins,
     bool enableDebug = false,
     bool enableBenchmark = false,
   }) {
+    if (plugins != null) {
+      PluginRegistryValidator.validate(plugins);
+    }
     final traces = <RuntimeTrace>[];
+    final pluginProvenance = <Map<String, dynamic>>[];
     const startedAt = 1000;
     const completedAt = 1005;
     const durationMs = completedAt - startedAt;
@@ -94,13 +101,65 @@ class RuntimePipeline {
           confidence = propagateConfidence(parent.confidence, node.depth);
         }
 
-        final scoredNode = node.copyWith(
-          confidence: confidence,
-          score: ScoreCalculator.calculateNodeScore(
-            node.copyWith(confidence: confidence),
-            scoringConfig,
-          ),
-        );
+        var evaluatedNode = node.copyWith(confidence: confidence);
+        if (plugins != null && plugins.evaluators.isNotEmpty) {
+          for (final evaluator in plugins.evaluators) {
+            final beforeProbability = evaluatedNode.probability;
+            final beforeImpact = evaluatedNode.impact;
+            final beforeCost = evaluatedNode.cost;
+            final beforeMetadata = evaluatedNode.metadata;
+            final beforeTags = evaluatedNode.tags;
+
+            evaluatedNode = evaluator.evaluate(
+                evaluatedNode, context ?? const EvaluationContext.empty());
+
+            // Track modifications made by this evaluator
+            final modifiedFields = <String, dynamic>{};
+            if (evaluatedNode.probability != beforeProbability) {
+              modifiedFields['probability'] = evaluatedNode.probability;
+            }
+            if (evaluatedNode.impact != beforeImpact) {
+              modifiedFields['impact'] = evaluatedNode.impact;
+            }
+            if (evaluatedNode.cost != beforeCost) {
+              modifiedFields['cost'] = evaluatedNode.cost;
+            }
+            if (!_isMapEqual(evaluatedNode.metadata, beforeMetadata)) {
+              modifiedFields['metadata'] =
+                  Map<String, dynamic>.from(evaluatedNode.metadata);
+            }
+            if (!_isListEqual(evaluatedNode.tags, beforeTags)) {
+              modifiedFields['tags'] = List<String>.from(evaluatedNode.tags);
+            }
+
+            if (modifiedFields.isNotEmpty) {
+              pluginProvenance.add({
+                'pluginId': evaluator.id,
+                'nodeId': node.id,
+                'modifiedFields': modifiedFields,
+              });
+            }
+          }
+          // Restore engine-owned structural identity and confidence metrics
+          evaluatedNode = DecisionNode(
+            id: node.id,
+            parentId: node.parentId,
+            childIds: node.childIds,
+            depth: node.depth,
+            confidence: confidence,
+            probability: evaluatedNode.probability,
+            impact: evaluatedNode.impact,
+            cost: evaluatedNode.cost,
+            metadata: evaluatedNode.metadata,
+            tags: evaluatedNode.tags,
+            pruningReason: evaluatedNode.pruningReason,
+            score: evaluatedNode.score,
+          );
+        }
+
+        final finalScore =
+            ScoreCalculator.calculateNodeScore(evaluatedNode, scoringConfig);
+        final scoredNode = evaluatedNode.copyWith(score: finalScore);
         scoredNodes[currentId] = scoredNode;
 
         for (final cid in node.childIds) {
@@ -196,9 +255,18 @@ class RuntimePipeline {
       final nodeSnapshots = <String, Map<String, dynamic>>{};
       for (final n in prunedTree.nodes.values) {
         nodeSnapshots[n.id] = {
+          'id': n.id,
+          if (n.parentId != null) 'parentId': n.parentId,
+          'childIds': n.childIds.toList(),
+          'probability': n.probability,
+          'impact': n.impact,
+          'cost': n.cost,
+          'confidence': n.confidence,
           'score': n.score,
           'depth': n.depth,
-          'confidence': n.confidence,
+          if (n.metadata.isNotEmpty)
+            'metadata': Map<String, dynamic>.from(n.metadata),
+          if (n.tags.isNotEmpty) 'tags': n.tags.toList(),
           if (n.pruningReason != null) 'pruningReason': n.pruningReason,
         };
       }
@@ -248,6 +316,7 @@ class RuntimePipeline {
                 'totalUtility': totalUtility,
               },
               benchmarkSnapshot: benchmarkSnapshot,
+              pluginProvenance: pluginProvenance,
             )
           : null;
 
@@ -305,6 +374,7 @@ class RuntimePipeline {
                 'totalUtility': 0.0,
               },
               benchmarkSnapshot: benchmarkSnapshot,
+              pluginProvenance: pluginProvenance,
             )
           : null;
 
@@ -320,5 +390,50 @@ class RuntimePipeline {
         benchmarkSnapshot: benchmarkSnapshot,
       );
     }
+  }
+
+  static bool _isMapEqual(Map<String, dynamic> a, Map<String, dynamic> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (final key in a.keys) {
+      if (!b.containsKey(key)) return false;
+      final valA = a[key];
+      final valB = b[key];
+      if (valA is Map && valB is Map) {
+        if (!_isMapEqual(
+            valA.cast<String, dynamic>(), valB.cast<String, dynamic>())) {
+          return false;
+        }
+      } else if (valA is List && valB is List) {
+        if (!_isListEqual(valA, valB)) {
+          return false;
+        }
+      } else if (valA != valB) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static bool _isListEqual(List<dynamic> a, List<dynamic> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      final valA = a[i];
+      final valB = b[i];
+      if (valA is Map && valB is Map) {
+        if (!_isMapEqual(
+            valA.cast<String, dynamic>(), valB.cast<String, dynamic>())) {
+          return false;
+        }
+      } else if (valA is List && valB is List) {
+        if (!_isListEqual(valA, valB)) {
+          return false;
+        }
+      } else if (valA != valB) {
+        return false;
+      }
+    }
+    return true;
   }
 }

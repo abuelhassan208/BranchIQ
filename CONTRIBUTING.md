@@ -70,16 +70,16 @@ dart doc           # Documentation must build cleanly
 
 ---
 
-## 7. Scope Boundaries for v0.1.x
+## 7. Scope Boundaries for v0.2.x
 
 Accepted contributions:
-- Bug fixes in the deterministic scoring or traversal logic
+- Bug fixes in the deterministic scoring, traversal, replay, explainability, or diffing logic
 - Additional unit and regression tests
 - Documentation improvements
 
-Out of scope for v0.1.x (require RFC for future versions):
+Out of scope for v0.2.x (require RFC for future versions):
 - New traversal strategies
-- Async evaluation
+- Async evaluation or background isolates
 - Flutter widget integrations
 - Dynamic node expansion
 - Plugin/extension systems

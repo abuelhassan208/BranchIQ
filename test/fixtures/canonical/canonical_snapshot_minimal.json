@@ -1,0 +1,1 @@
+{"engineVersion":"0.2.0","nodeSnapshots":{"accept":{"cost":"50.0000","depth":1,"id":"accept","impact":"0.8000","metadata":{},"probability":"0.9000","score":"0.8473"},"root":{"cost":"0.0000","depth":0,"id":"root","impact":"0.0000","metadata":{},"probability":"1.0000","score":"1.0000"}},"rootId":"root","schemaVersion":"2.0","selectedPath":["root","accept"]}

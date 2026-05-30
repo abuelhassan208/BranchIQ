@@ -10,7 +10,7 @@ Add BranchIQ to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  branchiq: ^0.1.0
+  branchiq: ^0.2.0
 ```
 
 Then run:
@@ -167,6 +167,9 @@ dart run example/minimal_example.dart
 | [Pruning Guide](pruning_guide.md) | How low-value branches are filtered out before traversal |
 | [Traversal Guide](traversal_guide.md) | How the best path is selected deterministically |
 | [Debugging Guide](debugging_guide.md) | How to inspect decisions using debug snapshots |
+| [Replay Guide](replay_guide.md) | How to reconstruct and inspect past evaluations offline |
+| [Explainability Guide](explainability_guide.md) | How to generate evidence-based explanation reports |
+| [Snapshot Diff Guide](snapshot_diff_guide.md) | How to compare two evaluations deterministically |
 
 ---
 

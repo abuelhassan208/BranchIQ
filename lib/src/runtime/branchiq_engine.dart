@@ -5,6 +5,7 @@ import '../debug/debug_snapshot.dart';
 import '../models/decision_tree.dart';
 import '../models/evaluation_context.dart';
 import '../models/evaluation_result.dart';
+import '../plugins/plugin_registry.dart';
 import 'runtime_pipeline.dart';
 
 /// The public entry point for evaluating [DecisionTree] structures.
@@ -57,6 +58,7 @@ abstract class BranchIQEngine {
     PruningConfig? pruningConfig,
     TraversalConfig? traversalConfig,
     EvaluationContext? context,
+    PluginRegistry? plugins,
     bool enableDebug = false,
     bool enableBenchmark = false,
     @Deprecated('Use scoringConfig instead') ScoringConfig? scoring,
@@ -90,6 +92,7 @@ class _BranchIQEngineImpl implements BranchIQEngine {
     PruningConfig? pruningConfig,
     TraversalConfig? traversalConfig,
     EvaluationContext? context,
+    PluginRegistry? plugins,
     bool enableDebug = false,
     bool enableBenchmark = false,
     ScoringConfig? scoring,
@@ -119,6 +122,7 @@ class _BranchIQEngineImpl implements BranchIQEngine {
       pruningConfig: resolvedPruning,
       traversalConfig: resolvedTraversal,
       context: context,
+      plugins: plugins,
       enableDebug: enableDebug,
       enableBenchmark: enableBenchmark,
     );

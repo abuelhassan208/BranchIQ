@@ -23,7 +23,7 @@ It is a pure Dart library with zero external dependencies. It runs on the callin
 
 ```yaml
 dependencies:
-  branchiq: ^0.1.0
+  branchiq: ^0.2.0
 ```
 
 ```bash
@@ -268,17 +268,78 @@ Trees violating these limits are rejected at construction time with a clear erro
 
 ---
 
+## Replay
+
+BranchIQ v0.2 includes a snapshot-driven replay layer. Evaluate once, then reconstruct, inspect, and compare past evaluations offline — without re-running the engine:
+
+```dart
+// Export and load a snapshot into a replay session
+final snapshot = engine.exportDebugSnapshot(result);
+final session = ReplayLoader.load(snapshot);
+
+// Serialize to byte-identical canonical JSON (safe for storage and diffing)
+final canonicalJson = session.toCanonicalJson();
+
+// Reconstruct from stored JSON at any time
+final restored = ReplayLoader.loadCanonicalJson(canonicalJson);
+
+// Inspect the session offline
+final inspector = ReplayInspector(restored);
+final pathNodes = inspector.inspectSelectedPath();
+```
+
+Replay never re-runs scoring, pruning, or traversal. All data comes exclusively from the serialized snapshot.
+
+---
+
+## Explainability
+
+Generate deterministic, evidence-based explanation reports from any replay session:
+
+```dart
+final report = BranchIQExplainer.explain(session);
+print(report.toMarkdown());
+
+// Compare the selected path against any alternative
+final comparison = BranchIQExplainer.comparePaths(
+  session: session,
+  selectedPath: ['root', 'approve', 'auto'],
+  rejectedPath: ['root', 'defer'],
+);
+print(comparison.toMarkdown());
+```
+
+Explanations are purely evidence-based — derived from verified metrics, not AI-generated reasoning or heuristic storytelling.
+
+---
+
+## Snapshot Diffing
+
+Compare two historical evaluations offline and deterministically:
+
+```dart
+final diff = SnapshotDiffer.compareSnapshots(source: snapA, target: snapB);
+print(diff.toMarkdown());
+```
+
+The differ tracks added, removed, and modified nodes, utility deltas, pruning status changes, and chronological trace differences — all with byte-identical canonical output.
+
+---
+
 ## Examples
 
 All examples are runnable:
 
 ```bash
-dart run example/minimal_example.dart        # Basic evaluation
-dart run example/scoring_example.dart         # Scoring weights & sensitivity
-dart run example/pruning_example.dart         # Pruning rules & fallback
-dart run example/traversal_example.dart       # Path selection & tie-breaking
-dart run example/debug_snapshot_example.dart  # Debug snapshot inspection
-dart run example/benchmark_example.dart       # Benchmark mode & determinism
+dart run example/minimal_example.dart          # Basic evaluation
+dart run example/scoring_example.dart           # Scoring weights & sensitivity
+dart run example/pruning_example.dart           # Pruning rules & fallback
+dart run example/traversal_example.dart         # Path selection & tie-breaking
+dart run example/debug_snapshot_example.dart    # Debug snapshot inspection
+dart run example/benchmark_example.dart         # Benchmark mode & determinism
+dart run example/replay_example.dart            # Snapshot-driven replay
+dart run example/explainability_example.dart    # Evidence-based explanations
+dart run example/snapshot_diff_example.dart     # Offline snapshot comparison
 ```
 
 ---
@@ -292,6 +353,9 @@ dart run example/benchmark_example.dart       # Benchmark mode & determinism
 | [Pruning Guide](doc/guides/pruning_guide.md) | Probability, score, beam width, fallback |
 | [Traversal Guide](doc/guides/traversal_guide.md) | Path selection, tie-breaking, accumulated utility |
 | [Debugging Guide](doc/guides/debugging_guide.md) | Traces, debug snapshots, benchmark metrics |
+| [Replay Guide](doc/guides/replay_guide.md) | Snapshot-driven replay, canonical serialization |
+| [Explainability Guide](doc/guides/explainability_guide.md) | Evidence-based explanations, path comparison |
+| [Snapshot Diff Guide](doc/guides/snapshot_diff_guide.md) | Offline snapshot comparison, metric deltas |
 
 Core architecture documents are in [`doc/core/`](doc/core/).
 
@@ -333,7 +397,7 @@ Key rules:
 
 ## Stability
 
-BranchIQ v0.1.0 is a developer preview. The core evaluation pipeline is stable. Public API signatures may evolve before v1.0.
+BranchIQ v0.2.0 is a developer preview. The core evaluation pipeline, replay infrastructure, explainability layer, and snapshot diffing are stable. Public API signatures may evolve before v1.0.
 
 ---
 
