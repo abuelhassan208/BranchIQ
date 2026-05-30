@@ -23,7 +23,7 @@ It is a pure Dart library with zero external dependencies. It runs on the callin
 
 ```yaml
 dependencies:
-  branchiq: ^0.2.0
+  branchiq: ^0.3.0-beta.1
 ```
 
 ```bash
@@ -326,6 +326,50 @@ The differ tracks added, removed, and modified nodes, utility deltas, pruning st
 
 ---
 
+## Plugins & Custom Evaluators
+
+BranchIQ v0.3 introduces a deterministic, replay-safe plugin infrastructure. You can register custom synchronous node evaluators to dynamically adjust scoring metrics during the evaluation phase:
+
+```dart
+// 1. Create a custom node evaluator
+class NetworkAdjuster implements NodeEvaluator {
+  @override
+  String get id => 'network-adjuster';
+
+  @override
+  DecisionNode evaluate(DecisionNode node, EvaluationContext context) {
+    if (node.id == 'fetch_network' && context.metadata['isOffline'] == true) {
+      // Return a copy of the node with modified evaluator-owned metrics
+      return node.copyWith(
+        probability: 0.0,
+        cost: node.cost + 100.0,
+      );
+    }
+    return node;
+  }
+}
+
+// 2. Register it in the PluginRegistry
+final registry = PluginRegistry(evaluators: [NetworkAdjuster()]);
+
+// 3. Pass it to the engine
+final result = engine.evaluateSync(
+  tree: tree,
+  plugins: registry,
+  // ... other parameters
+);
+```
+
+### Plugin Infrastructure Boundaries
+
+To preserve BranchIQ's core deterministic and forensic guarantees, the plugin system has strict boundaries:
+- **NodeEvaluator only**: Currently, custom evaluators are supported. Expansion hooks (`BranchExpander`) and reporting hooks (`ReportExporter`) are deferred.
+- **Engine-owned field protection**: Plugins cannot alter structural or engine-controlled fields (`id`, `parentId`, `childIds`, `depth`, `confidence`). If a plugin attempts to modify these, the engine automatically restores the original values.
+- **Synchronous only**: Plugins must run synchronously on the calling thread. No `Future` returns, `async` execution, reflection, I/O, or mutable global state is allowed.
+- **Evidence-only Replay & Explainability**: Plugin provenance is recorded directly into `DebugSnapshot.pluginProvenance` during evaluation. Replay and explanation tools process this recorded evidence offline *without* re-executing any plugin code.
+
+---
+
 ## Examples
 
 All examples are runnable:
@@ -397,7 +441,7 @@ Key rules:
 
 ## Stability
 
-BranchIQ v0.2.0 is a developer preview. The core evaluation pipeline, replay infrastructure, explainability layer, and snapshot diffing are stable. Public API signatures may evolve before v1.0.
+BranchIQ v0.3.0 is a developer preview. The core evaluation pipeline, replay infrastructure, explainability layer, snapshot diffing, and plugin infrastructure are stable. Public API signatures may evolve before v1.0.
 
 ---
 

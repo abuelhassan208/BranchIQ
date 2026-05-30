@@ -2,7 +2,7 @@
 
 * **RFC Number**: RFC-0003
 * **Title**: Deterministic Plugin Infrastructure
-* **Status**: Proposed
+* **Status**: Approved
 * **Author**: `<Principal Systems Architect>`
 * **Target Version**: v0.3
 * **Created Date**: `2026-05-30`

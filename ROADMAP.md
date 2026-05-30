@@ -15,11 +15,23 @@ This roadmap outlines the development phases for the BranchIQ package. Our prior
 * [x] Implement literal, hallucination-free Explainability and Path Comparison.
 * [x] Implement offline multi-version Snapshot Diffing and chronological Trace Comparison.
 
-## Phase v0.3 - Adaptive Context Systems & Plugins (Planned)
-* [ ] Design dynamic context bindings to fetch telemetry environment states.
-* [ ] Introduce custom context resolvers for network latency, cellular signal strength, and device battery metrics.
-* [ ] Expose public `NodeEvaluator` interfaces for dynamic node parameter calculations.
-* [ ] Expose public `BranchExpander` interfaces to allow dynamic runtime tree expansion.
+## Phase v0.3 - Plugin Infrastructure Core (Completed)
+* [x] Expose public `NodeEvaluator` interfaces for dynamic node parameter calculations.
+* [x] Design lightweight `PluginRegistry` with ASCII validation, duplicate checks, and deterministic executor ordering.
+* [x] Implement engine-owned field protection (restores structural identity and confidence metrics automatically) during evaluator execution.
+* [x] Design and implement plugin provenance recording inside `DebugSnapshot`.
+* [x] Support offline, plugin-independent Replay and Explainability by loading plugin provenance evidence.
+
+## Phase v0.3.1 - Release Preparation / Beta Readiness (In Progress)
+* [/] Clean up project context, documentation, and guides.
+* [ ] Verify pub package publication with `dart pub publish --dry-run`.
+* [ ] Finalize beta release version 0.3.0-beta.1.
+
+## Phase v0.4 - Advanced Traversal & Expanders (Planned)
+* [ ] Expose public `BranchExpander` interfaces to allow dynamic runtime tree expansion (deferred from v0.3).
+* [ ] Implement BFS, DFS, and deterministic A* traversal configurations.
+* [ ] Design custom report exporters (deferred from v0.3).
+* [ ] Design dynamic context bindings to fetch telemetry environment states (context resolvers for latency, signal, battery, etc.).
 
 ## Future Advanced Tooling
 * [ ] Build CLI JSON snapshot analyzers to validate tree structures.

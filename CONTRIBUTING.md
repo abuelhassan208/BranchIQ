@@ -6,7 +6,7 @@ Thank you for your interest in contributing to BranchIQ. This package is designe
 
 ## 1. RFC-First Philosophy
 
-Before writing any implementation code or proposing modifications to the public API surface, submit a Request for Comments (RFC) document under `docs/rfc/`.
+Before writing any implementation code or proposing modifications to the public API surface, submit a Request for Comments (RFC) document under `doc/rfc/`.
 
 - The RFC must define the problem statement, proposed interfaces, complexity implications, and impact on determinism guarantees.
 - Code changes submitted without an approved RFC will be closed automatically.
@@ -27,7 +27,7 @@ BranchIQ guarantees that given identical tree models, configuration parameters, 
 
 Our mission is to maintain a simple, lightweight, bounded runtime engine.
 
-- Do not introduce background isolates, database caching, plugin systems, or widget integrations.
+- Do not introduce background isolates, database caching, or widget integrations. Plugins must adhere strictly to the synchronous, pure-in-memory `NodeEvaluator` interface.
 - Do not add async/Future/Stream to the evaluation pipeline.
 - Do not add adaptive learning, ML inference, or AGI-style systems.
 - We maintain a zero runtime dependency codebase that compiles instantly and runs synchronously.
@@ -70,16 +70,15 @@ dart doc           # Documentation must build cleanly
 
 ---
 
-## 7. Scope Boundaries for v0.2.x
+## 7. Scope Boundaries for v0.3.x
 
 Accepted contributions:
-- Bug fixes in the deterministic scoring, traversal, replay, explainability, or diffing logic
+- Bug fixes in deterministic scoring, traversal, replay, explainability, diffing, or plugin registries
 - Additional unit and regression tests
 - Documentation improvements
 
-Out of scope for v0.2.x (require RFC for future versions):
+Out of scope for v0.3.x (require RFC for future versions):
 - New traversal strategies
-- Async evaluation or background isolates
+- Async evaluation, background isolates, or I/O/reflection in plugins
 - Flutter widget integrations
-- Dynamic node expansion
-- Plugin/extension systems
+- Dynamic node expansion (`BranchExpander`) or custom report exporters (`ReportExporter`)

@@ -1,6 +1,6 @@
 # Replay Guide
 
-BranchIQ v0.2 provides a snapshot-driven replay layer that lets you reconstruct, inspect, and compare past evaluations without re-running the engine.
+BranchIQ provides a snapshot-driven replay layer that lets you reconstruct, inspect, and compare past evaluations without re-running the engine.
 
 ---
 

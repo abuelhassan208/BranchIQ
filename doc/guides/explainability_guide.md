@@ -1,6 +1,6 @@
 # BranchIQ Explainability Guide
 
-This guide introduces **deterministic, evidence-based explainability** (Phase C) in BranchIQ. It demonstrates how to leverage structured diagnostic execution snapshots (`DebugSnapshot`) via a `ReplaySession` to reconstruct, query, and compare decision pathways offline.
+This guide introduces **deterministic, evidence-based explainability** in BranchIQ. It demonstrates how to leverage structured diagnostic execution snapshots (`DebugSnapshot`) via a `ReplaySession` to reconstruct, query, and compare decision pathways offline.
 
 ---
 
@@ -73,6 +73,13 @@ A comprehensive, aligned table detailing:
 
 ### 6. Runtime Traces
 Chronological traces documenting each pipeline step taken (validation, scoring, pruning, traversal, completion).
+
+### 7. Plugin Provenance
+Details any scoring metric modifications made by registered plugins (e.g., `NodeEvaluator` instances) during the evaluation. This provides stable audit records of:
+*   Which plugin modified which node.
+*   Which fields were modified and their resulting values.
+
+Because BranchIQ uses an evidence-based replay architecture, this section is reconstructed purely from static snapshot records without executing plugin classes at explanation time.
 
 ---
 

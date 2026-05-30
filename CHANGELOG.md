@@ -6,6 +6,26 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## 0.3.0-beta.1 (Unreleased)
+
+### Added
+
+**Plugin Infrastructure Core**
+- Added public `NodeEvaluator` interface for custom synchronous scoring modification.
+- Added public `PluginRegistry` for registering and ordering evaluators.
+- Added internal `PluginRegistryValidator` validating evaluator IDs for uniqueness, non-emptiness, and ASCII-only stability.
+- Added optional `PluginRegistry` parameter to `BranchIQEngine.evaluateSync()`.
+- Implemented synchronous evaluator execution sequence in deterministic registry order during the scoring phase.
+- Added automatic engine-owned field protection (`id`, `parentId`, `childIds`, `depth`, `confidence`) which are restored by the engine after evaluator execution.
+- Added plugin provenance evidence collection written into `DebugSnapshot.pluginProvenance`.
+- Supported offline, plugin-independent Replay and Explainability by loading plugin provenance evidence directly from serialized snapshots without executing plugin classes.
+
+### Changed
+- Updated Explainability Markdown/JSON reports to display recorded plugin provenance evidence.
+- Ensured snapshot diffing remains stable and deterministic when processing snapshots with plugin provenance.
+
+---
+
 ## 0.2.0 (2026-05-23)
 
 ### Added

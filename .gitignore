@@ -23,3 +23,7 @@ coverage/
 # Log and crash files
 *.log
 doc/api/
+
+# Context folder ignores
+context/
+

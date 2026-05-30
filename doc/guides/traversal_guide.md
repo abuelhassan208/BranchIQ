@@ -93,7 +93,7 @@ const traversalConfig = TraversalConfig(
 );
 ```
 
-This is the only available strategy in v0.2.0. Additional strategies may be added in future releases.
+This is the only available strategy in v0.3.0. Additional strategies may be added in future releases.
 
 ---
 
