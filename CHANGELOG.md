@@ -6,6 +6,40 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## 0.3.0 (2026-05-30)
+
+### Added
+
+**Core Runtime**
+- Bounded, synchronous, and stateless runtime decision engine.
+- Multi-attribute utility scoring (MAUT) mapping probability, impact, and cost weights.
+- Depth-based confidence decay and linear cost normalization.
+- Beam-search, score, and probability pruners.
+- Deterministic priority-first search pathfinder with stable tie-breaking lexicographical ordering.
+- Hard safety limits preventing cycle execution overruns, orphan nodes, and stack exhaustion.
+
+**Diagnostics**
+- Snapshot-driven, offline Replay Infrastructure (`ReplayLoader`, `ReplaySession`, `ReplayInspector`) restoring states purely from recorded evidence.
+- Bounded, evidence-based explainability reporting (`BranchIQExplainer`, `ExplanationReport`, `DecisionComparison`) in Markdown/JSON.
+- Offline snapshot comparison and chronological trace diffing (`SnapshotDiffer`, `SnapshotDiff`).
+
+**Determinism**
+- Canonical serialization core (`CanonicalFloatFormatter`, `CanonicalJsonEncoder`, `CanonicalMarkdownWriter`) ensuring byte-identical JSON/Markdown representation and negative zero normalization.
+
+**Plugin Infrastructure**
+- Extensible custom scoring interceptors (`NodeEvaluator`, `PluginRegistry`).
+- Validation engine (`PluginRegistryValidator`) enforcing unique, non-empty, ASCII-only plugin IDs.
+- Engine-owned parameter protection safeguarding structural properties and decayed confidence.
+- Plugin provenance collection and offline execution decoupled from plugin source code.
+
+**Release Infrastructure & Automation**
+- GitHub Actions CI checking formatting, static analysis, unit/regression tests, documentation, pub publish dry-run, and auto-discovery example runs.
+- GitHub Actions Publish Pipeline deploying automatically to pub.dev via OIDC Trusted Publishing upon tag push (`v*`).
+- Automated tag-to-pubspec version safety checks.
+- Manual approval release gate using `pub-release` GitHub Environment.
+
+---
+
 ## 0.3.0-beta.3 (2026-05-30)
 
 ### Fixed

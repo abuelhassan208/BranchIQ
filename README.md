@@ -23,7 +23,7 @@ It is a pure Dart library with zero external dependencies. It runs on the callin
 
 ```yaml
 dependencies:
-  branchiq: ^0.3.0-beta.3
+  branchiq: ^0.3.0
 ```
 
 ```bash
