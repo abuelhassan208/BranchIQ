@@ -6,6 +6,7 @@ import '../models/decision_tree.dart';
 import '../models/evaluation_context.dart';
 import '../models/evaluation_result.dart';
 import '../plugins/plugin_registry.dart';
+import '../version/branchiq_version.dart';
 import 'runtime_pipeline.dart';
 
 /// The public entry point for evaluating [DecisionTree] structures.
@@ -148,7 +149,7 @@ class _BranchIQEngineImpl implements BranchIQEngine {
       return result.debugSnapshot!;
     }
     return DebugSnapshot(
-      engineVersion: '0.1.0',
+      engineVersion: branchIQVersion,
       rootId: result.bestPath.nodes.isNotEmpty
           ? result.bestPath.nodes.first.id
           : '',

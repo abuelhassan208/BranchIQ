@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.1 (2026-05-30)
+
+### Fixed
+
+- Fixed `DebugSnapshot.engineVersion` metadata reporting inconsistency, replacing hardcoded version string with a centralized, internal constant.
+- Updated `ReplayLoader` schema inference to map `0.3.x` engine snapshots to schema version `2.0` automatically.
+- No public API changes or modifications to core scoring, pruning, traversal, replay, explainability, or diffing calculations.
+
 ---
 
 ## 0.3.0 (2026-05-30)

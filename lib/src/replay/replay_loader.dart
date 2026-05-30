@@ -11,7 +11,8 @@ class ReplayLoader {
   static ReplaySession load(DebugSnapshot snapshot) {
     final json = snapshot.toJson();
     if (!json.containsKey('schemaVersion')) {
-      if (snapshot.engineVersion.startsWith('0.2')) {
+      if (snapshot.engineVersion.startsWith('0.2') ||
+          snapshot.engineVersion.startsWith('0.3')) {
         json['schemaVersion'] = '2.0';
       } else {
         json['schemaVersion'] = '1.0';

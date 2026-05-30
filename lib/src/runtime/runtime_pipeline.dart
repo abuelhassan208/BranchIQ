@@ -19,6 +19,7 @@ import '../plugins/plugin_registry_validator.dart';
 import '../pruning/pruning_pipeline.dart';
 import '../traversal/traversal_pipeline.dart';
 import '../validation/tree_validator.dart';
+import '../version/branchiq_version.dart';
 import 'runtime_state.dart';
 
 /// Orchestrates the entire Entscheidung tree processing lifecycle.
@@ -294,7 +295,7 @@ class RuntimePipeline {
 
       final snapshot = enableDebug
           ? DebugSnapshot(
-              engineVersion: '0.1.0',
+              engineVersion: branchIQVersion,
               rootId: root.id,
               selectedPath: bestPath.nodeIds,
               nodeSnapshots: nodeSnapshots,
@@ -353,7 +354,7 @@ class RuntimePipeline {
 
       final snapshot = enableDebug
           ? DebugSnapshot(
-              engineVersion: '0.1.0',
+              engineVersion: branchIQVersion,
               rootId: tree.nodes.isNotEmpty ? tree.nodes.keys.first : '',
               selectedPath: const [],
               nodeSnapshots: const {},
